@@ -1,0 +1,14 @@
+{
+  "domain": "play24",
+  "name": "Play24",
+  "config_flow": true,
+  "dependencies": [],
+  "integration_type": "hub",
+  "iot_class": "cloud_polling",
+  "version": "0.3.0",
+  "codeowners": [
+    "@LukaszP2"
+  ],
+  "documentation": "https://github.com/LukaszP2/ha-play24",
+  "issue_tracker": "https://github.com/LukaszP2/ha-play24/issues"
+}

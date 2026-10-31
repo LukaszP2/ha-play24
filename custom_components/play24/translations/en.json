@@ -1,0 +1,114 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Choose your authentication method for Play24: SMS verification code (recommended) or manual JSESSIONID session cookie.\n\n⚠️ **Credentials and session cookies are private. Never share them.**",
+        "data": {
+          "method": "Authentication method",
+          "jsessionid": "JSESSIONID (optional)"
+        }
+      },
+      "jsessionid": {
+        "description": "Log in to 24.play.pl in your browser, then copy the JSESSIONID cookie value for domain 24.play.pl.\n\n⚠️ **JSESSIONID is your authentication credential. Never share it.**",
+        "data": {
+          "jsessionid": "JSESSIONID"
+        }
+      },
+      "sms": {
+        "description": "Enter your phone number registered in Play24.",
+        "data": {
+          "msisdn": "Phone number (MSISDN)"
+        }
+      },
+      "otp": {
+        "description": "An SMS verification code has been sent to your phone. Enter the code below to complete setup.",
+        "data": {
+          "otp": "SMS code"
+        }
+      },
+      "reauth_confirm": {
+        "description": "The Play24 session has expired. Select authentication method to refresh your session.",
+        "data": {
+          "method": "Authentication method",
+          "jsessionid": "JSESSIONID (optional)"
+        }
+      },
+      "reconfigure": {
+        "description": "Update Play24 configuration by selecting your authentication method.",
+        "data": {
+          "method": "Authentication method",
+          "jsessionid": "JSESSIONID (optional)"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Invalid or expired Play24 session.",
+      "cannot_connect": "Failed to connect to Play24.",
+      "unknown": "Unexpected error received from Play24.",
+      "invalid_otp": "Invalid SMS code. Please try again.",
+      "expired_otp": "SMS code has expired. Please try again.",
+      "otp_limit_exceeded": "SMS verification attempt limit exceeded.",
+      "invalid_phone_number": "Invalid phone number (minimum 9 digits required)."
+    },
+    "abort": {
+      "already_configured": "Account is already configured.",
+      "reauth_successful": "Re-authentication was successful.",
+      "reconfigure_successful": "Reconfiguration was successful."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "account_msisdns_count": {
+        "name": "Active numbers count"
+      },
+      "successful_msisdns_count": {
+        "name": "Synchronized numbers count"
+      },
+      "last_update": {
+        "name": "Last update"
+      },
+      "unread_messages": {
+        "name": "Unread messages"
+      },
+      "account_invoice_amount": {
+        "name": "Account last invoice amount"
+      },
+      "account_invoice_due_date": {
+        "name": "Account invoice due date"
+      },
+      "account_payment_status": {
+        "name": "Account invoice payment status"
+      },
+      "tariff": {
+        "name": "Tariff"
+      },
+      "active_components": {
+        "name": "Active services"
+      },
+      "billing_cycle": {
+        "name": "Billing cycle"
+      },
+      "remaining_cycle_days": {
+        "name": "Remaining days in cycle"
+      },
+      "data_package": {
+        "name": "Data package"
+      },
+      "last_invoice_amount": {
+        "name": "Last invoice amount"
+      },
+      "invoice_due_date": {
+        "name": "Invoice due date"
+      },
+      "payment_status": {
+        "name": "Payment status"
+      },
+      "account_balance": {
+        "name": "Account balance"
+      },
+      "outgoing_validity": {
+        "name": "Outgoing calls validity"
+      }
+    }
+  }
+}

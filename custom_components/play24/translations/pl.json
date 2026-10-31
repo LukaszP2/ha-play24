@@ -1,0 +1,114 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Wybierz metodę logowania do Play24: kodem SMS (zalecane) lub za pomocą ciasteczka sesji JSESSIONID.\n\n⚠️ **Dane uwierzytelniające i ciasteczka sesji są poufne. Nie udostępniaj ich.**",
+        "data": {
+          "method": "Metoda logowania",
+          "jsessionid": "JSESSIONID (opcjonalnie)"
+        }
+      },
+      "jsessionid": {
+        "description": "Zaloguj się normalnie w przeglądarce na 24.play.pl, a następnie pobierz wartość cookie JSESSIONID dla domeny 24.play.pl.\n\n⚠️ **JSESSIONID stanowi dane uwierzytelniające. Nie udostępniaj go.**",
+        "data": {
+          "jsessionid": "JSESSIONID"
+        }
+      },
+      "sms": {
+        "description": "Podaj swój numer telefonu zarejestrowany w Play24.",
+        "data": {
+          "msisdn": "Numer telefonu (MSISDN)"
+        }
+      },
+      "otp": {
+        "description": "Na Twój numer telefonu został wysłany kod SMS. Wpisz go poniżej, aby zakończyć konfigurację.",
+        "data": {
+          "otp": "Kod SMS"
+        }
+      },
+      "reauth_confirm": {
+        "description": "Sesja Play24 wygasła. Wybierz metodę ponownego logowania, aby odświeżyć sesję.",
+        "data": {
+          "method": "Metoda logowania",
+          "jsessionid": "JSESSIONID (opcjonalnie)"
+        }
+      },
+      "reconfigure": {
+        "description": "Zaktualizuj konfigurację Play24 wybierając metodę logowania.",
+        "data": {
+          "method": "Metoda logowania",
+          "jsessionid": "JSESSIONID (opcjonalnie)"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Nieprawidłowa lub wygasła sesja Play24.",
+      "cannot_connect": "Nie można połączyć się z Play24.",
+      "unknown": "Play24 zwrócił nieoczekiwaną odpowiedź.",
+      "invalid_otp": "Nieprawidłowy kod SMS. Spróbuj ponownie.",
+      "expired_otp": "Kod SMS wygasł. Spróbuj ponownie.",
+      "otp_limit_exceeded": "Przekroczono limit prób weryfikacji kodu SMS.",
+      "invalid_phone_number": "Nieprawidłowy numer telefonu (wymagane min. 9 cyfr)."
+    },
+    "abort": {
+      "already_configured": "Konto jest już skonfigurowane.",
+      "reauth_successful": "Ponowne uwierzytelnienie powiodło się.",
+      "reconfigure_successful": "Rekonfiguracja powiodła się."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "account_msisdns_count": {
+        "name": "Liczba aktywnych numerów"
+      },
+      "successful_msisdns_count": {
+        "name": "Zsynchronizowane numery"
+      },
+      "last_update": {
+        "name": "Ostatnia aktualizacja"
+      },
+      "unread_messages": {
+        "name": "Nieprzeczytane wiadomości"
+      },
+      "account_invoice_amount": {
+        "name": "Kwota ostatniej faktury konta"
+      },
+      "account_invoice_due_date": {
+        "name": "Termin płatności faktury konta"
+      },
+      "account_payment_status": {
+        "name": "Status płatności faktury konta"
+      },
+      "tariff": {
+        "name": "Taryfa"
+      },
+      "active_components": {
+        "name": "Aktywne usługi"
+      },
+      "billing_cycle": {
+        "name": "Cykl rozliczeniowy"
+      },
+      "remaining_cycle_days": {
+        "name": "Pozostało dni cyklu"
+      },
+      "data_package": {
+        "name": "Pakiet danych"
+      },
+      "last_invoice_amount": {
+        "name": "Kwota ostatniej faktury"
+      },
+      "invoice_due_date": {
+        "name": "Termin płatności"
+      },
+      "payment_status": {
+        "name": "Status płatności"
+      },
+      "account_balance": {
+        "name": "Stan konta"
+      },
+      "outgoing_validity": {
+        "name": "Ważność połączeń wychodzących"
+      }
+    }
+  }
+}
