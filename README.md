@@ -1,5 +1,9 @@
 # Play24 — Integracja Home Assistant
 
+
+[![Otwórz repozytorium w HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=LukaszP2&repository=ha-play24&category=integration)
+[![Dodaj integrację do Home Assistant](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=play24)
+
 Niestandardowa integracja Home Assistant dla serwisu Play24 (24.play.pl), umożliwiająca kompleksowe monitorowanie konta, podpiętych numerów (Multi-MSISDN), taryf, faktur, stanu konta na kartę, pakietów danych, aktywnych usług oraz cykli rozliczeniowych.
 
 Wersja: **0.3.0**.
@@ -96,3 +100,13 @@ Testy jednostkowe działają w 100% offline w oparciu o syntetyczne mocki:
 ```bash
 python3 -m pytest custom_components/play24/tests -v
 ```
+## Instalacja
+
+### 🚀 Szybka instalacja (1 kliknięcie przez My Home Assistant)
+
+[![Otwórz repozytorium w HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=LukaszP2&repository=ha-play24&category=integration)
+
+Po zainstalowaniu i ponownym uruchomieniu Home Assistant, kliknij poniższy przycisk, aby skonfigurować integrację:
+
+[![Dodaj integrację do Home Assistant](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=play24)
+
