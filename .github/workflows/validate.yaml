@@ -35,4 +35,4 @@ jobs:
         with:
           category: "integration"
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          ignore: "topics"
+          ignore: "brands description topics"
