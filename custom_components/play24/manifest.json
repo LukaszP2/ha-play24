@@ -1,17 +1,17 @@
 {
   "domain": "play24",
   "name": "Play24",
-  "config_flow": true,
-  "dependencies": [],
-  "integration_type": "hub",
-  "iot_class": "cloud_polling",
-  "version": "0.4.0",
   "codeowners": [
     "@LukaszP2"
   ],
+  "config_flow": true,
+  "dependencies": [],
   "documentation": "https://github.com/LukaszP2/ha-play24",
+  "integration_type": "hub",
+  "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/LukaszP2/ha-play24/issues",
   "loggers": [
     "custom_components.play24"
-  ]
+  ],
+  "version": "0.4.0"
 }

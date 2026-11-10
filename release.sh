@@ -17,8 +17,15 @@ import json
 with open('${MANIFEST}', 'r+') as f:
     d = json.load(f)
     d['version'] = '${NEW_VER}'
+    def sort_key(k):
+        if k == 'domain':
+            return (0, k)
+        if k == 'name':
+            return (1, k)
+        return (2, k)
+    sorted_d = dict(sorted(d.items(), key=lambda item: sort_key(item[0])))
     f.seek(0)
-    json.dump(d, f, indent=2, ensure_ascii=False)
+    json.dump(sorted_d, f, indent=2, ensure_ascii=False)
     f.write('\n')
     f.truncate()
 "

@@ -58,3 +58,24 @@ def test_hacs_validation_does_not_ignore_brands():
         if "ignore:" in line:
             ignored = line.split(":", 1)[1].strip().strip('"').strip("'").split()
             assert "brands" not in ignored, f"'brands' should not be ignored in HACS action: {line}"
+
+
+def test_manifest_keys_sorted_for_hassfest():
+    """Verify that manifest.json keys follow Home Assistant hassfest requirements.
+
+    Requirements: domain first, name second, then alphabetical order.
+    """
+    import json
+    manifest_path = Path(__file__).parent.parent / "custom_components" / "play24" / "manifest.json"
+    assert manifest_path.is_file()
+
+    with open(manifest_path, encoding="utf-8") as f:
+        keys = list(json.load(f).keys())
+
+    assert len(keys) >= 2
+    assert keys[0] == "domain", "manifest.json must have 'domain' as the first key"
+    assert keys[1] == "name", "manifest.json must have 'name' as the second key"
+
+    rest = keys[2:]
+    assert rest == sorted(rest), f"manifest.json keys after domain and name must be sorted alphabetically: {rest}"
+
