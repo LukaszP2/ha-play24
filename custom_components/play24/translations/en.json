@@ -5,13 +5,15 @@
         "description": "Choose your authentication method for Play24: SMS verification code (recommended) or manual JSESSIONID session cookie.\n\n⚠️ **Credentials and session cookies are private. Never share them.**",
         "data": {
           "method": "Authentication method",
-          "jsessionid": "JSESSIONID (optional)"
+          "jsessionid": "JSESSIONID (optional)",
+          "dwrsessionid": "DWRSESSIONID (optional)"
         }
       },
       "jsessionid": {
         "description": "Log in to 24.play.pl in your browser, then copy the JSESSIONID cookie value for domain 24.play.pl.\n\n⚠️ **JSESSIONID is your authentication credential. Never share it.**",
         "data": {
-          "jsessionid": "JSESSIONID"
+          "jsessionid": "JSESSIONID",
+          "dwrsessionid": "DWRSESSIONID (optional)"
         }
       },
       "sms": {
@@ -30,14 +32,16 @@
         "description": "The Play24 session has expired. Select authentication method to refresh your session.",
         "data": {
           "method": "Authentication method",
-          "jsessionid": "JSESSIONID (optional)"
+          "jsessionid": "JSESSIONID (optional)",
+          "dwrsessionid": "DWRSESSIONID (optional)"
         }
       },
       "reconfigure": {
         "description": "Update Play24 configuration by selecting your authentication method.",
         "data": {
           "method": "Authentication method",
-          "jsessionid": "JSESSIONID (optional)"
+          "jsessionid": "JSESSIONID (optional)",
+          "dwrsessionid": "DWRSESSIONID (optional)"
         }
       }
     },
@@ -53,7 +57,21 @@
     "abort": {
       "already_configured": "Account is already configured.",
       "reauth_successful": "Re-authentication was successful.",
-      "reconfigure_successful": "Reconfiguration was successful."
+      "reconfigure_successful": "Reconfiguration was successful.",
+      "reauth_failed": "Re-authentication failed.",
+      "wrong_account": "You must authenticate with the same Play24 account."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Play24 Options",
+        "description": "Configure Play24 options.",
+        "data": {
+          "scan_interval_hours": "Polling interval (hours)",
+          "scan_interval": "Polling interval"
+        }
+      }
     }
   },
   "entity": {

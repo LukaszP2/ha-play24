@@ -98,7 +98,7 @@ Gdy sesja wygaśnie, kliknij **Konfiguruj ponownie** lub **Ponownie uwierzytelni
 Testy jednostkowe działają w 100% offline w oparciu o syntetyczne mocki:
 
 ```bash
-python3 -m pytest custom_components/play24/tests -v
+python3 -m pytest tests -v
 ```
 ## Instalacja
 

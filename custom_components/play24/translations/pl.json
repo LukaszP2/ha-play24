@@ -5,13 +5,15 @@
         "description": "Wybierz metodę logowania do Play24: kodem SMS (zalecane) lub za pomocą ciasteczka sesji JSESSIONID.\n\n⚠️ **Dane uwierzytelniające i ciasteczka sesji są poufne. Nie udostępniaj ich.**",
         "data": {
           "method": "Metoda logowania",
-          "jsessionid": "JSESSIONID (opcjonalnie)"
+          "jsessionid": "JSESSIONID (opcjonalnie)",
+          "dwrsessionid": "DWRSESSIONID (opcjonalnie)"
         }
       },
       "jsessionid": {
         "description": "Zaloguj się normalnie w przeglądarce na 24.play.pl, a następnie pobierz wartość cookie JSESSIONID dla domeny 24.play.pl.\n\n⚠️ **JSESSIONID stanowi dane uwierzytelniające. Nie udostępniaj go.**",
         "data": {
-          "jsessionid": "JSESSIONID"
+          "jsessionid": "JSESSIONID",
+          "dwrsessionid": "DWRSESSIONID (opcjonalnie)"
         }
       },
       "sms": {
@@ -30,14 +32,16 @@
         "description": "Sesja Play24 wygasła. Wybierz metodę ponownego logowania, aby odświeżyć sesję.",
         "data": {
           "method": "Metoda logowania",
-          "jsessionid": "JSESSIONID (opcjonalnie)"
+          "jsessionid": "JSESSIONID (opcjonalnie)",
+          "dwrsessionid": "DWRSESSIONID (opcjonalnie)"
         }
       },
       "reconfigure": {
         "description": "Zaktualizuj konfigurację Play24 wybierając metodę logowania.",
         "data": {
           "method": "Metoda logowania",
-          "jsessionid": "JSESSIONID (opcjonalnie)"
+          "jsessionid": "JSESSIONID (opcjonalnie)",
+          "dwrsessionid": "DWRSESSIONID (opcjonalnie)"
         }
       }
     },
@@ -53,7 +57,21 @@
     "abort": {
       "already_configured": "Konto jest już skonfigurowane.",
       "reauth_successful": "Ponowne uwierzytelnienie powiodło się.",
-      "reconfigure_successful": "Rekonfiguracja powiodła się."
+      "reconfigure_successful": "Rekonfiguracja powiodła się.",
+      "reauth_failed": "Ponowne uwierzytelnienie nie powiodło się.",
+      "wrong_account": "Musisz zalogować się na to samo konto Play24."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opcje Play24",
+        "description": "Skonfiguruj opcje integracji Play24.",
+        "data": {
+          "scan_interval_hours": "Częstotliwość odpytywania (w godzinach)",
+          "scan_interval": "Interwał odpytywania"
+        }
+      }
     }
   },
   "entity": {

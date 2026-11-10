@@ -1,0 +1,19 @@
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "SIM",  # flake8-simplify
+    "UP",   # pyupgrade
+    "N",    # pep8-naming
+]
+ignore = ["E501", "N818", "SIM102", "B008"]
+
+[tool.ruff.lint.isort]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
