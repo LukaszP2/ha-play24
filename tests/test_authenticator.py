@@ -301,4 +301,3 @@ async def test_submit_otp_disallowed_redirect_scheme_http(auth):
             await auth.async_submit_otp("123456")
 
         mock_session_instance.get.assert_not_called()
-

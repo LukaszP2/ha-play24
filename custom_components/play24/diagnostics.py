@@ -8,11 +8,12 @@ from homeassistant.components.diagnostics import async_redact_data
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
-from .const import CONF_JSESSIONID, DOMAIN
+from .const import CONF_DWRSESSIONID, CONF_JSESSIONID, DOMAIN
 from .coordinator import Play24DataUpdateCoordinator
 
 TO_REDACT = {
     CONF_JSESSIONID,
+    CONF_DWRSESSIONID,
     "msisdn",
     "group_owner_msisdn",
     "invoice_number",

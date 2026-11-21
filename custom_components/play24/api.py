@@ -144,7 +144,9 @@ class Play24Client:
         else:
             # Deterministic DWR session token derived from JSESSIONID to avoid CSRF mismatch
             # across client instantiations (e.g. config_flow -> coordinator -> HA reload)
-            self._dwrsess = hashlib.sha256(f"dwr_{self._jsessionid}".encode()).hexdigest()[:32]
+            self._dwrsess = hashlib.sha256(
+                f"dwr_{self._jsessionid}".encode()
+            ).hexdigest()[:32]
 
         rand_page = "".join(random.choices(string.ascii_letters + string.digits, k=16))
         self._page_id = f"{rand_page}-0"
@@ -179,7 +181,7 @@ class Play24Client:
         self,
         max_retries: int = 3,
         backoff_base: float = 1.0,
-        backoff_max: float = 30.0,
+        backoff_max: float = 10.0,
     ) -> bool:
         """Verifies session validity."""
         url = "https://24.play.pl/Play24/Welcome"
@@ -231,7 +233,7 @@ class Play24Client:
         self,
         max_retries: int = 3,
         backoff_base: float = 1.0,
-        backoff_max: float = 30.0,
+        backoff_max: float = 10.0,
     ) -> str:
         """Fetches the P24_CSRFTOKEN required for DWR requests."""
         headers = dict(self._headers)
@@ -267,9 +269,7 @@ class Play24Client:
                             f"Authentication error while fetching CSRF (HTTP {status})"
                         )
                     else:
-                        raise Play24DataError(
-                            f"Failed to fetch CSRF. Status: {status}"
-                        )
+                        raise Play24DataError(f"Failed to fetch CSRF. Status: {status}")
             except (TimeoutError, aiohttp.ClientError) as e:
                 raise Play24ConnectionError(
                     f"Network error while fetching CSRF: {e}"

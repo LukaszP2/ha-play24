@@ -74,7 +74,8 @@ async def test_sensors_creation_and_values(mock_coordinator):
     assert "taryfa" not in tariff_sensor.extra_state_attributes
     assert "numer" not in tariff_sensor.extra_state_attributes
     assert "urzadzenie" not in tariff_sensor.extra_state_attributes
-    assert tariff_sensor.extra_state_attributes["typ_taryfy"] == "postpaid"
+    assert "typ_taryfy" not in tariff_sensor.extra_state_attributes
+    assert tariff_sensor.extra_state_attributes["tariff_type"] == "postpaid"
     assert tariff_sensor._attr_device_info.get("via_device") == (
         DOMAIN,
         "test_entry_id",
@@ -95,14 +96,19 @@ async def test_sensors_creation_and_values(mock_coordinator):
         mock_coordinator, prep_device_info, msisdn_prep
     )
     assert prep_tariff_sensor.native_value == "Play na Kartę odNOWA"
-    assert prep_tariff_sensor.extra_state_attributes["typ_taryfy"] == "prepaid"
+    assert prep_tariff_sensor.extra_state_attributes["tariff_type"] == "prepaid"
+    assert "typ_taryfy" not in prep_tariff_sensor.extra_state_attributes
 
     # 3. Active components sensor
     comp_sensor = Play24ActiveComponentsSensor(mock_coordinator, device_info, msisdn)
     assert comp_sensor.name == "Aktywne usługi"
     assert comp_sensor.native_value == 2
     assert comp_sensor.unique_id == "test_entry_id_500123456_active_components"
-    assert comp_sensor.extra_state_attributes["uslugi"] == ["Darmowe minuty", "Roaming"]
+    assert comp_sensor.extra_state_attributes["services"] == [
+        "Darmowe minuty",
+        "Roaming",
+    ]
+    assert "uslugi" not in comp_sensor.extra_state_attributes
 
     # 4. Billing cycle sensor - must return None when None
     cycle_sensor = Play24BillingCycleSensor(mock_coordinator, device_info, msisdn)
@@ -113,7 +119,7 @@ async def test_sensors_creation_and_values(mock_coordinator):
     # 5. Account active msisdns count sensor
     parent_device_info = DeviceInfo(
         identifiers={(DOMAIN, "test_entry_id")},
-        name="Konto Play24",
+        name="Play24 Account",
         manufacturer="Play",
         model="Play24 Account",
     )
@@ -181,6 +187,7 @@ async def test_async_setup_entry_hierarchy():
     # Verify parent device info on account sensor
     parent_entity = added_entities[0]
     assert parent_entity.device_info["identifiers"] == {(DOMAIN, "entry_123")}
+    assert parent_entity.device_info["name"] == "Play24 Account"
     assert parent_entity.device_info["model"] == "Play24 Account"
     assert parent_entity.device_info["configuration_url"] == "https://24.play.pl"
 
@@ -236,17 +243,22 @@ async def test_postpaid_expanded_sensors():
     # 1. Tariff with offer details and group owner attributes
     tariff_sensor = Play24TariffSensor(coord, device_info, "500000001")
     assert tariff_sensor.native_value == "GRUPA L"
-    assert tariff_sensor.extra_state_attributes["typ_taryfy"] == "postpaid"
+    assert tariff_sensor.extra_state_attributes["tariff_type"] == "postpaid"
     assert (
-        tariff_sensor.extra_state_attributes["szczegoly_oferty"]
+        tariff_sensor.extra_state_attributes["offer_details"]
         == "VIP Oferta POKOLENIA - NUMER GŁÓWNY"
     )
-    assert tariff_sensor.extra_state_attributes["numer_glowny"] == "500000001"
+    assert tariff_sensor.extra_state_attributes["group_owner"] == "***0001"
+    assert "typ_taryfy" not in tariff_sensor.extra_state_attributes
+    assert "szczegoly_oferty" not in tariff_sensor.extra_state_attributes
+    assert "numer_glowny" not in tariff_sensor.extra_state_attributes
+    assert "500000001" not in tariff_sensor.extra_state_attributes.values()
 
     # 2. Billing cycle with day attribute
     cycle_sensor = Play24BillingCycleSensor(coord, device_info, "500000001")
     assert cycle_sensor.native_value == "20. dzień miesiąca"
-    assert cycle_sensor.extra_state_attributes["dzien_cyklu"] == 20
+    assert cycle_sensor.extra_state_attributes["cycle_day"] == 20
+    assert "dzien_cyklu" not in cycle_sensor.extra_state_attributes
 
     # 3. Remaining cycle days
     rem_sensor = Play24BillingCycleRemainingDaysSensor(coord, device_info, "500000001")
@@ -265,9 +277,12 @@ async def test_postpaid_expanded_sensors():
     assert inv_sensor.native_value == 245.28
     assert inv_sensor.native_unit_of_measurement == "PLN"
     assert inv_sensor.device_class == "monetary"
-    assert inv_sensor.extra_state_attributes["numer_faktury"] == "F/00000000/01/26"
-    assert inv_sensor.extra_state_attributes["data_wystawienia"] == "2026-09-22"
-    assert inv_sensor.extra_state_attributes["kwota_oryginalna"] == "245,28 zł"
+    assert inv_sensor.extra_state_attributes["invoice_number"] == "F/00000000/01/26"
+    assert inv_sensor.extra_state_attributes["issue_date"] == "2026-09-22"
+    assert inv_sensor.extra_state_attributes["original_amount"] == "245,28 zł"
+    assert "numer_faktury" not in inv_sensor.extra_state_attributes
+    assert "data_wystawienia" not in inv_sensor.extra_state_attributes
+    assert "kwota_oryginalna" not in inv_sensor.extra_state_attributes
 
     # 6. Due date
     due_sensor = Play24InvoiceDueDateSensor(coord, device_info, "500000001")
@@ -306,7 +321,8 @@ async def test_prepaid_expanded_sensors():
     validity_sensor = Play24AccountValiditySensor(coord, device_info, "500999888")
     assert validity_sensor.native_value == "2026-11-30"
     assert validity_sensor.device_class == "date"
-    assert validity_sensor.extra_state_attributes["waznosc_konta"] == "2026-12-31"
+    assert validity_sensor.extra_state_attributes["account_validity"] == "2026-12-31"
+    assert "waznosc_konta" not in validity_sensor.extra_state_attributes
 
 
 @pytest.mark.asyncio
@@ -328,7 +344,10 @@ async def test_account_invoice_sensors():
     assert inv_sensor.native_unit_of_measurement == "PLN"
     assert inv_sensor.device_class == "monetary"
     assert inv_sensor.state_class is None
-    assert inv_sensor.extra_state_attributes["numer_faktury"] == "F/999/2026"
+    assert inv_sensor.extra_state_attributes["invoice_number"] == "F/999/2026"
+    assert inv_sensor.extra_state_attributes["original_amount"] == "312,40 zł"
+    assert "numer_faktury" not in inv_sensor.extra_state_attributes
+    assert "kwota_oryginalna" not in inv_sensor.extra_state_attributes
 
     due_sensor = Play24AccountInvoiceDueDateSensor(coord, device_info, "test_entry")
     assert due_sensor.native_value == "2026-11-15"
@@ -629,3 +648,118 @@ async def test_async_setup_entry_listener_unregistration():
     unload_cb = entry.async_on_unload.call_args[0][0]
     unload_cb()
     assert len(listeners) == 0
+
+
+@pytest.mark.asyncio
+async def test_pkg03_no_polish_attribute_keys_and_english_parent_device_name():
+    """PKG-03: Verify all extra_state_attributes keys are English snake_case and parent name is English."""
+    hass = MagicMock()
+    entry = MagicMock()
+    entry.entry_id = "test_pkg03"
+
+    coord = MagicMock()
+    coord.config_entry = entry
+    coord.last_update_success_time = datetime(2026, 10, 12, 10, 0, 0, tzinfo=UTC)
+    coord.account_data = {
+        "invoice_number": "FV/123/2026",
+        "last_invoice_amount": "150,00 zł",
+        "invoice_amount_value": 150.00,
+        "invoice_due_date": "2026-11-20",
+        "payment_status": "Opłacony",
+    }
+    coord.data = {
+        "500123456": {
+            "msisdn": "500123456",
+            "tariff": "Abonament",
+            "offer_details": "Super Plan",
+            "group_owner_msisdn": "500987654",
+            "billing_cycle": "1. dzień miesiąca",
+            "billing_cycle_day": 1,
+            "active_components": ["5G", "Roaming"],
+            "invoice_number": "FV/456/2026",
+            "invoice_date": "2026-10-01",
+            "last_invoice_amount": "50,00 zł",
+            "outgoing_validity": "2027-01-01",
+            "account_validity": "2027-01-01",
+        }
+    }
+    hass.data = {DOMAIN: {entry.entry_id: coord}}
+
+    entities = []
+    await async_setup_entry(hass, entry, lambda batch: entities.extend(batch))
+
+    # 1. Verify parent device info name is "Play24 Account"
+    account_entities = [e for e in entities if not hasattr(e, "msisdn")]
+    for entity in account_entities:
+        assert entity.device_info["name"] == "Play24 Account"
+        assert "Konto Play24" not in str(entity.device_info)
+
+    # 2. Verify all extra_state_attributes across all entities
+    polish_keys = {
+        "numer_faktury",
+        "typ_taryfy",
+        "uslugi",
+        "dzien_cyklu",
+        "waznosc_konta",
+        "numer_glowny",
+        "cykl_rozliczeniowy",
+        "szczegoly_oferty",
+        "data_wystawienia",
+        "kwota_oryginalna",
+    }
+    allowed_english_keys = {
+        "invoice_number",
+        "tariff_type",
+        "services",
+        "cycle_day",
+        "account_validity",
+        "group_owner",
+        "billing_cycle",
+        "offer_details",
+        "issue_date",
+        "original_amount",
+    }
+
+    found_keys = set()
+    for entity in entities:
+        attrs = getattr(entity, "extra_state_attributes", None)
+        if attrs and isinstance(attrs, dict):
+            for k in attrs:
+                assert k not in polish_keys, f"Found Polish attribute key: {k}"
+                assert k in allowed_english_keys, f"Unexpected attribute key: {k}"
+                found_keys.add(k)
+
+    # Confirm all expected English keys were tested and present
+    assert allowed_english_keys.issubset(found_keys)
+
+
+def test_pkg04_group_owner_msisdn_masked_pii():
+    """PKG-04: Verify group_owner_msisdn is masked and raw phone number is never in attributes."""
+    coord = MagicMock()
+    coord.config_entry.entry_id = "test_pkg04"
+    coord.data = {
+        "500111222": {
+            "msisdn": "500111222",
+            "tariff": "Abonament",
+            "group_owner_msisdn": "500999888",
+        }
+    }
+    device_info = DeviceInfo(identifiers={(DOMAIN, "500111222")})
+
+    sensor = Play24TariffSensor(coord, device_info, "500111222")
+    attrs = sensor.extra_state_attributes
+
+    assert "group_owner" in attrs
+    assert attrs["group_owner"] == "***9888"
+    assert "numer_glowny" not in attrs
+    assert "500999888" not in str(attrs)
+    assert "500999888" not in attrs.values()
+
+    # Test short number fallback (< 4 digits)
+    coord.data["500111222"]["group_owner_msisdn"] = "12"
+    attrs_short = sensor.extra_state_attributes
+    assert attrs_short["group_owner"] == "***"
+
+    # Test none / empty group_owner_msisdn
+    coord.data["500111222"]["group_owner_msisdn"] = None
+    assert "group_owner" not in sensor.extra_state_attributes

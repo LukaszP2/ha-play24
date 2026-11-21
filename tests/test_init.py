@@ -169,8 +169,9 @@ async def test_init_reload_entry():
     entry.entry_id = "test_entry_options_reload"
 
     await async_reload_entry(hass, entry)
-    hass.config_entries.async_reload.assert_awaited_once_with("test_entry_options_reload")
-
+    hass.config_entries.async_reload.assert_awaited_once_with(
+        "test_entry_options_reload"
+    )
 
 
 @pytest.mark.asyncio
@@ -190,6 +191,5 @@ async def test_init_unload_success():
         entry, ["sensor"]
     )
     assert (
-        "diagnostics"
-        not in hass.config_entries.async_unload_platforms.call_args[0][1]
+        "diagnostics" not in hass.config_entries.async_unload_platforms.call_args[0][1]
     )

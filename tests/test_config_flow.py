@@ -1054,6 +1054,3 @@ async def test_options_flow_updates_coordinator_via_update_listener(
     assert result["type"] == "create_entry"
     assert mock_coordinator.update_interval == timedelta(hours=12)
     assert entry.options[CONF_SCAN_INTERVAL_HOURS] == 12
-
-
-

@@ -11,7 +11,10 @@ async def test_diagnostics_redaction():
     hass = MagicMock()
     entry = MagicMock()
     entry.entry_id = "test_entry"
-    entry.data = {"jsessionid": "super_secret_cookie"}
+    entry.data = {
+        "jsessionid": "super_secret_cookie",
+        "dwrsessionid": "super_secret_dwr_token",
+    }
 
     coordinator = MagicMock()
     coordinator.account_data = {
@@ -30,6 +33,7 @@ async def test_diagnostics_redaction():
     diagnostics = await async_get_config_entry_diagnostics(hass, entry)
 
     assert diagnostics["entry_data"]["jsessionid"] == "**REDACTED**"
+    assert diagnostics["entry_data"]["dwrsessionid"] == "**REDACTED**"
     assert "***3456" in diagnostics["data"]
     assert diagnostics["data"]["***3456"]["msisdn"] == "***3456"
     assert diagnostics["data"]["***3456"]["group_owner_msisdn"] == "***4321"
@@ -40,7 +44,10 @@ async def test_diagnostics_empty_data():
     hass = MagicMock()
     entry = MagicMock()
     entry.entry_id = "test_entry"
-    entry.data = {"jsessionid": "super_secret_cookie"}
+    entry.data = {
+        "jsessionid": "super_secret_cookie",
+        "dwrsessionid": "super_secret_dwr_token",
+    }
 
     coordinator = MagicMock()
     coordinator.account_data = {}
@@ -50,5 +57,6 @@ async def test_diagnostics_empty_data():
     diagnostics = await async_get_config_entry_diagnostics(hass, entry)
 
     assert diagnostics["entry_data"]["jsessionid"] == "**REDACTED**"
+    assert diagnostics["entry_data"]["dwrsessionid"] == "**REDACTED**"
     assert diagnostics["account_data"] == {}
     assert diagnostics["data"] == {}

@@ -1,0 +1,57 @@
+{
+  "entity": {
+    "sensor": {
+      "account_msisdns_count": {
+        "default": "mdi:phone-multiple"
+      },
+      "successful_msisdns_count": {
+        "default": "mdi:phone-check"
+      },
+      "last_update": {
+        "default": "mdi:clock-check-outline"
+      },
+      "unread_messages": {
+        "default": "mdi:email-outline"
+      },
+      "account_invoice_amount": {
+        "default": "mdi:cash"
+      },
+      "account_invoice_due_date": {
+        "default": "mdi:calendar-clock"
+      },
+      "account_payment_status": {
+        "default": "mdi:credit-card-check-outline"
+      },
+      "tariff": {
+        "default": "mdi:tag-outline"
+      },
+      "active_components": {
+        "default": "mdi:format-list-checks"
+      },
+      "billing_cycle": {
+        "default": "mdi:calendar-sync"
+      },
+      "remaining_cycle_days": {
+        "default": "mdi:calendar-clock"
+      },
+      "data_package": {
+        "default": "mdi:web"
+      },
+      "last_invoice_amount": {
+        "default": "mdi:cash"
+      },
+      "invoice_due_date": {
+        "default": "mdi:calendar-clock"
+      },
+      "payment_status": {
+        "default": "mdi:credit-card-check-outline"
+      },
+      "account_balance": {
+        "default": "mdi:cash"
+      },
+      "outgoing_validity": {
+        "default": "mdi:calendar-clock"
+      }
+    }
+  }
+}

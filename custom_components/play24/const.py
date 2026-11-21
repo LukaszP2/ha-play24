@@ -16,4 +16,3 @@ SCAN_INTERVAL_OPTIONS = {
     12: "12h",
     24: "24h",
 }
-

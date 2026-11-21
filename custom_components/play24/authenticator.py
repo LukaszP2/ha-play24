@@ -81,6 +81,10 @@ class Play24Authenticator:
     @property
     def cookie_jar(self) -> aiohttp.CookieJar:
         if self._cookie_jar is None:
+            # unsafe=True is required because the Play24 login flow executes a multi-step
+            # OIDC redirection chain between 24.play.pl and login.play.pl (including intermediate
+            # gateways/proxies and cross-subdomain cookie delegation). Without unsafe=True,
+            # aiohttp's strict cookie jar drops necessary session cookies across redirects.
             self._cookie_jar = aiohttp.CookieJar(unsafe=True)
         return self._cookie_jar
 
@@ -175,18 +179,31 @@ class Play24Authenticator:
 
                 parsed_redirect = urlparse(current_url)
                 redirect_host = (
-                    parsed_redirect.hostname
-                    or (parsed_redirect.netloc.split(":")[0] if parsed_redirect.netloc else "")
-                ).lower().rstrip(".")
+                    (
+                        parsed_redirect.hostname
+                        or (
+                            parsed_redirect.netloc.split(":")[0]
+                            if parsed_redirect.netloc
+                            else ""
+                        )
+                    )
+                    .lower()
+                    .rstrip(".")
+                )
                 if (
                     parsed_redirect.scheme != "https"
                     or not redirect_host
                     or not (
                         redirect_host == "play.pl"
-                        or (redirect_host.endswith(".play.pl") and not redirect_host.startswith("."))
+                        or (
+                            redirect_host.endswith(".play.pl")
+                            and not redirect_host.startswith(".")
+                        )
                     )
                 ):
-                    _LOGGER.warning("Disallowed redirect URL blocked: %s", _redact_url(current_url))
+                    _LOGGER.warning(
+                        "Disallowed redirect URL blocked: %s", _redact_url(current_url)
+                    )
                     raise Play24AuthError("Disallowed redirect host")
 
                 _LOGGER.debug("Following redirect to: %s", _redact_url(current_url))

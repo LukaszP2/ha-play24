@@ -250,4 +250,3 @@ def test_coordinator_options_scan_interval():
     entry_invalid.options = {CONF_SCAN_INTERVAL_HOURS: "invalid"}
     coord_invalid = Play24DataUpdateCoordinator(hass, client, entry=entry_invalid)
     assert coord_invalid.update_interval == DEFAULT_SCAN_INTERVAL
-

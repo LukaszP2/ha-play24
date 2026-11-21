@@ -18,6 +18,12 @@ from .const import DOMAIN
 _LOGGER = logging.getLogger(__name__)
 
 
+def _mask_msisdn(msisdn: str) -> str:
+    """Mask phone number keeping only last 4 digits."""
+    clean = str(msisdn).strip()
+    return f"***{clean[-4:]}" if len(clean) >= 4 else "***"
+
+
 def _classify_tariff(tariff: str | None) -> str:
     """Classify tariff into prepaid, postpaid or unknown."""
     if not tariff:
@@ -113,7 +119,7 @@ async def async_setup_entry(
     # Parent Account Device Info
     parent_device_info = DeviceInfo(
         identifiers={(DOMAIN, entry.entry_id)},
-        name="Konto Play24",
+        name="Play24 Account",
         manufacturer="Play",
         model="Play24 Account",
         configuration_url="https://24.play.pl",
@@ -335,9 +341,11 @@ class Play24AccountInvoiceAmountSensor(CoordinatorEntity, SensorEntity):
     def extra_state_attributes(self):
         attrs = {}
         if self.coordinator.account_data.get("invoice_number"):
-            attrs["numer_faktury"] = self.coordinator.account_data.get("invoice_number")
+            attrs["invoice_number"] = self.coordinator.account_data.get(
+                "invoice_number"
+            )
         if self.coordinator.account_data.get("last_invoice_amount"):
-            attrs["kwota_oryginalna"] = self.coordinator.account_data.get(
+            attrs["original_amount"] = self.coordinator.account_data.get(
                 "last_invoice_amount"
             )
         return attrs
@@ -427,14 +435,14 @@ class Play24TariffSensor(Play24BaseSensor):
         data = self.coordinator.data.get(self.msisdn, {})
         tariff = data.get("tariff")
         attrs = {
-            "typ_taryfy": _classify_tariff(tariff),
+            "tariff_type": _classify_tariff(tariff),
         }
         if data.get("offer_details"):
-            attrs["szczegoly_oferty"] = data.get("offer_details")
+            attrs["offer_details"] = data.get("offer_details")
         if data.get("group_owner_msisdn"):
-            attrs["numer_glowny"] = data.get("group_owner_msisdn")
+            attrs["group_owner"] = _mask_msisdn(data.get("group_owner_msisdn"))
         if data.get("billing_cycle"):
-            attrs["cykl_rozliczeniowy"] = data.get("billing_cycle")
+            attrs["billing_cycle"] = data.get("billing_cycle")
         return attrs
 
 
@@ -462,7 +470,7 @@ class Play24ActiveComponentsSensor(Play24BaseSensor):
     @property
     def extra_state_attributes(self):
         data = self.coordinator.data.get(self.msisdn, {})
-        return {"uslugi": data.get("active_components", [])}
+        return {"services": data.get("active_components", [])}
 
 
 class Play24BillingCycleSensor(Play24BaseSensor):
@@ -489,7 +497,7 @@ class Play24BillingCycleSensor(Play24BaseSensor):
         data = self.coordinator.data.get(self.msisdn, {})
         attrs = {}
         if data.get("billing_cycle_day") is not None:
-            attrs["dzien_cyklu"] = data.get("billing_cycle_day")
+            attrs["cycle_day"] = data.get("billing_cycle_day")
         return attrs
 
 
@@ -564,11 +572,11 @@ class Play24LastInvoiceAmountSensor(Play24BaseSensor):
         data = self.coordinator.data.get(self.msisdn, {})
         attrs = {}
         if data.get("invoice_number"):
-            attrs["numer_faktury"] = data.get("invoice_number")
+            attrs["invoice_number"] = data.get("invoice_number")
         if data.get("invoice_date"):
-            attrs["data_wystawienia"] = data.get("invoice_date")
+            attrs["issue_date"] = data.get("invoice_date")
         if data.get("last_invoice_amount"):
-            attrs["kwota_oryginalna"] = data.get("last_invoice_amount")
+            attrs["original_amount"] = data.get("last_invoice_amount")
         return attrs
 
 
@@ -658,5 +666,5 @@ class Play24AccountValiditySensor(Play24BaseSensor):
         data = self.coordinator.data.get(self.msisdn, {})
         attrs = {}
         if data.get("account_validity"):
-            attrs["waznosc_konta"] = data.get("account_validity")
+            attrs["account_validity"] = data.get("account_validity")
         return attrs

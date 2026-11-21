@@ -31,12 +31,16 @@ def test_brand_assets_exist_and_valid():
     logo = brand_dir / "logo.png"
     assert logo.is_file(), "brand/logo.png must exist"
     w, h = _get_png_dimensions(logo)
-    assert 128 <= min(w, h) <= 256, f"logo.png shortest side must be 128-256px, got {w}x{h}"
+    assert 128 <= min(w, h) <= 256, (
+        f"logo.png shortest side must be 128-256px, got {w}x{h}"
+    )
 
     logo_2x = brand_dir / "logo@2x.png"
     assert logo_2x.is_file(), "brand/logo@2x.png must exist"
     w, h = _get_png_dimensions(logo_2x)
-    assert 256 <= min(w, h) <= 512, f"logo@2x.png shortest side must be 256-512px, got {w}x{h}"
+    assert 256 <= min(w, h) <= 512, (
+        f"logo@2x.png shortest side must be 256-512px, got {w}x{h}"
+    )
 
 
 def test_root_assets_exist_and_valid():
@@ -57,7 +61,9 @@ def test_hacs_validation_does_not_ignore_brands():
     for line in content.splitlines():
         if "ignore:" in line:
             ignored = line.split(":", 1)[1].strip().strip('"').strip("'").split()
-            assert "brands" not in ignored, f"'brands' should not be ignored in HACS action: {line}"
+            assert "brands" not in ignored, (
+                f"'brands' should not be ignored in HACS action: {line}"
+            )
 
 
 def test_manifest_keys_sorted_for_hassfest():
@@ -66,7 +72,10 @@ def test_manifest_keys_sorted_for_hassfest():
     Requirements: domain first, name second, then alphabetical order.
     """
     import json
-    manifest_path = Path(__file__).parent.parent / "custom_components" / "play24" / "manifest.json"
+
+    manifest_path = (
+        Path(__file__).parent.parent / "custom_components" / "play24" / "manifest.json"
+    )
     assert manifest_path.is_file()
 
     with open(manifest_path, encoding="utf-8") as f:
@@ -77,5 +86,6 @@ def test_manifest_keys_sorted_for_hassfest():
     assert keys[1] == "name", "manifest.json must have 'name' as the second key"
 
     rest = keys[2:]
-    assert rest == sorted(rest), f"manifest.json keys after domain and name must be sorted alphabetically: {rest}"
-
+    assert rest == sorted(rest), (
+        f"manifest.json keys after domain and name must be sorted alphabetically: {rest}"
+    )

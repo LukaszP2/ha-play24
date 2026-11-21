@@ -528,4 +528,3 @@ class Play24OptionsFlowHandler(config_entries.OptionsFlow):
                 extra=vol.ALLOW_EXTRA,
             ),
         )
-

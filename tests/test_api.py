@@ -434,3 +434,32 @@ async def test_api_test_connection_rate_limit_max_retries_exceeded(
     assert mock_session.get.call_count == 3
     assert mock_sleep.await_count == 2
 
+
+@pytest.mark.asyncio
+async def test_api_test_connection_backoff_max_capped_at_10(client, mock_session):
+    """Test async_test_connection caps sleep delay at default backoff_max (10s)."""
+    cm_429 = _make_mock_cm(429, headers={"Retry-After": "60"})
+    cm_200 = _make_mock_cm(200, text="OK")
+    mock_session.get.side_effect = [cm_429, cm_200]
+
+    with patch("asyncio.sleep", new_callable=AsyncMock) as mock_sleep:
+        res = await client.async_test_connection()
+
+    assert res is True
+    assert mock_session.get.call_count == 2
+    mock_sleep.assert_awaited_once_with(10.0)
+
+
+@pytest.mark.asyncio
+async def test_api_get_csrf_backoff_max_capped_at_10(client, mock_session):
+    """Test async_get_csrf caps sleep delay at default backoff_max (10s)."""
+    cm_429 = _make_mock_cm(429, headers={"Retry-After": "45"})
+    cm_200 = _make_mock_cm(200, text="P24_CSRFTOKEN: csrf_capped")
+    mock_session.post.side_effect = [cm_429, cm_200]
+
+    with patch("asyncio.sleep", new_callable=AsyncMock) as mock_sleep:
+        token = await client.async_get_csrf()
+
+    assert token == "csrf_capped"
+    assert mock_session.post.call_count == 2
+    mock_sleep.assert_awaited_once_with(10.0)
